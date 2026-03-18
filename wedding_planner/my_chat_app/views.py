@@ -8,10 +8,17 @@ from checklist.models import ChecklistItem
 import openai
 import os
 
-# Configure sua chave da OpenAI
-import os
-openai_api_key = os.environ.get('OPENAI_API_KEY')
+#import os
+from dotenv import load_dotenv
+import openai
 
+# Carregar variáveis de ambiente
+load_dotenv()
+
+# Configure sua chave da OpenAI
+client = openai.OpenAI(
+    api_key=os.getenv('OPENAI_API_KEY')  # Pega a chave do arquivo .env
+)
 class ChatView(APIView):
     permission_classes = [IsAuthenticated]
     
