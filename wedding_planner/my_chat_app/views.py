@@ -9,9 +9,8 @@ import openai
 import os
 
 # Configure sua chave da OpenAI
-client = openai.OpenAI(
-    api_key='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'  # Substitua pela sua chave real
-)
+import os
+openai_api_key = os.environ.get('OPENAI_API_KEY')
 
 class ChatView(APIView):
     permission_classes = [IsAuthenticated]
