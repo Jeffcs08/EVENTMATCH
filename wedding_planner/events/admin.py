@@ -3,6 +3,6 @@ from .models import Event
 
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
-    list_display = ('couple_names', 'event_date', 'city', 'venue', 'user')
-    search_fields = ('couple_names', 'city', 'venue')
-    list_filter = ('style', 'event_date')
+    list_display = ('name', 'event_type', 'theme', 'event_date', 'budget_total', 'user')
+    search_fields = ('name', 'city', 'venue')
+    list_filter = ('event_type', 'theme')

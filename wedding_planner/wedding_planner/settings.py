@@ -96,7 +96,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'wedding_planner_db',
         'USER': 'postgres',
-        'PASSWORD': 'ads',  # Confirme se essa é a senha correta
+        'PASSWORD': 'admin123',  # ← SENHA NOVA SEM ACENTOS
         'HOST': 'localhost',
         'PORT': '5432',
     }
