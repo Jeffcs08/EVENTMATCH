@@ -1,0 +1,49 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block title %}La Vie Casamentos - Admin{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">
+    <a href="{% url 'admin:index' %}">
+        <img src="{% static 'admin/img/logo.png' %}" alt="La Vie Casamentos" style="height: 40px; vertical-align: middle;">
+        La Vie Casamentos - Administração
+    </a>
+</h1>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}
+
+{% block extrahead %}
+<link rel="stylesheet" type="text/css" href="{% static 'admin/css/custom.css' %}">
+<style>
+    /* Estilos adicionais */
+    .custom-welcome {
+        background: linear-gradient(135deg, #e11d48, #9f1239);
+        color: white;
+        padding: 20px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+    
+    .custom-welcome h2 {
+        margin: 0;
+        font-size: 24px;
+    }
+    
+    .custom-welcome p {
+        margin: 10px 0 0;
+        opacity: 0.9;
+    }
+</style>
+{% endblock %}
+
+{% block content_title %}
+{% if title %}
+<div class="custom-welcome">
+    <h2>Bem-vindo ao Painel Administrativo</h2>
+    <p>Gerencie eventos, usuários, convidados e fornecedores do La Vie Casamentos</p>
+</div>
+{% endif %}
+{% endblock %}

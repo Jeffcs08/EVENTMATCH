@@ -1,40 +1,21 @@
-# No topo do arquivo, com os outros imports
-from datetime import timedelta
-
-# REST Framework settings
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ),
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
-    ),
-}
-
-# JWT Settings
-SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
-    'AUTH_HEADER_TYPES': ('Bearer',),
-    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
-}
 """
 Django settings for wedding_planner project.
 """
 
 from pathlib import Path
+import os
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-sua-chave-secreta-aqui'
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-sua-chave-secreta-aqui')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-import os
+DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost').split(',')
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
 
 # Application definition
 INSTALLED_APPS = [
@@ -56,7 +37,7 @@ INSTALLED_APPS = [
     'guests',
     'suppliers',
     'checklist',
-    'my_chat_app'  # ← ADICIONADO
+    'my_chat_app',
 ]
 
 MIDDLEWARE = [
@@ -72,11 +53,11 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'wedding_planner.urls'
 
-# CONFIGURAÇÃO CRÍTICA QUE ESTAVA FALTANDO
+# Templates configuration
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],  # Para templates personalizados
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -91,17 +72,22 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'wedding_planner.wsgi.application'
 
-# Database - SUA CONFIGURAÇÃO DO POSTGRESQL
-
-import os
-import dj_database_url
-
+# Database - SQLite para desenvolvimento local (coleta de estáticos)
 DATABASES = {
-    'default': dj_database_url.config(
-        default=os.environ.get('DATABASE_URL'),
-        conn_max_age=600
-    )
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
 }
+
+# Se quiser usar PostgreSQL, descomente as linhas abaixo e comente as de cima
+# import dj_database_url
+# DATABASES = {
+#     'default': dj_database_url.config(
+#         default=os.environ.get('DATABASE_URL'),
+#         conn_max_age=600
+#     )
+# }
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
@@ -126,13 +112,35 @@ USE_I18N = True
 USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# CORS settings - PERMITIR TUDO PARA TESTE (depois pode restringir)
-CORS_ALLOW_ALL_ORIGINS = True
+# REST Framework settings
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+}
+
+# JWT Settings
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+}
+
+# CORS settings
+CORS_ALLOW_ALL_ORIGINS = True  # Permite todas as origens para desenvolvimento
 
 # Se preferir especificar as origens, use:
 CORS_ALLOWED_ORIGINS = [
@@ -147,16 +155,7 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 CORS_ALLOW_CREDENTIALS = True
-MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'corsheaders.middleware.CorsMiddleware',  # ← ADICIONE ESTA LINHA
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-]
+
 CORS_ALLOW_METHODS = [
     'DELETE',
     'GET',
