@@ -15,6 +15,5 @@ router.register(r'checklist', ChecklistViewSet, basename='checklist')
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
-    path('api/auth/', include('accounts.urls')),
-    # path('api/chat/', include('my_chat_app.urls')),  # ← COMENTE ESTA LINHA
+    path('api/auth/', include('accounts.urls')),  # ← ESSA LINHA É ESSENCIAL
 ]
