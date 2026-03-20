@@ -8,17 +8,6 @@ from checklist.models import ChecklistItem
 import openai
 import os
 
-#import os
-from dotenv import load_dotenv
-import openai
-
-# Carregar variáveis de ambiente
-load_dotenv()
-
-# Configure sua chave da OpenAI
-client = openai.OpenAI(
-    api_key=os.getenv('OPENAI_API_KEY')  # Pega a chave do arquivo .env
-)
 class ChatView(APIView):
     permission_classes = [IsAuthenticated]
     
@@ -41,59 +30,59 @@ class ChatView(APIView):
             suppliers = Supplier.objects.filter(event=event)
             checklist = ChecklistItem.objects.filter(event=event)
             
-            # Construir o prompt
-            prompt = f"""
-            Você é uma assistente especialista em planejamento de casamentos.
+            # Calcular estatísticas
+            total_guests = guests.count()
+            confirmed_guests = guests.filter(status='confirmado').count()
+            pending_guests = guests.filter(status='pendente').count()
             
-            DADOS DO EVENTO:
-            - Noivos: {event.couple_names}
-            - Data: {event.event_date}
-            - Local: {event.venue}
-            - Convidados esperados: {event.guests_expected}
-            - Orçamento: R$ {event.budget_total}
+            total_suppliers = suppliers.count()
+            contracted_suppliers = suppliers.filter(status='contratado').count()
+            total_spent = sum(s.value for s in suppliers if s.value)
             
-            CONVIDADOS:
-            - Total cadastrados: {guests.count()}
-            - Confirmados: {guests.filter(status='confirmado').count()}
-            - Pendentes: {guests.filter(status='pendente').count()}
+            total_tasks = checklist.count()
+            completed_tasks = checklist.filter(done=True).count()
             
-            FORNECEDORES:
-            - Total: {suppliers.count()}
-            - Contratados: {suppliers.filter(status='contratado').count()}
-            - Gasto atual: R$ {sum(s.value for s in suppliers if s.value)}
+            # Tentar usar OpenAI se a chave existir
+            api_key = os.environ.get('OPENAI_API_KEY')
             
-            CHECKLIST:
-            - Total de tarefas: {checklist.count()}
-            - Concluídas: {checklist.filter(done=True).count()}
-            
-            Pergunta do usuário: {user_message}
-            
-            Responda em português, de forma prática e amigável.
-            """
-            
-            # Chamar a OpenAI
-            response = client.chat.completions.create(
-                model="gpt-3.5-turbo",
-                messages=[
-                    {"role": "system", "content": "Você é uma consultora de casamentos profissional."},
-                    {"role": "user", "content": prompt}
-                ],
-                temperature=0.7,
-                max_tokens=500
-            )
-            
-            reply = response.choices[0].message.content
+            if api_key:
+                try:
+                    client = openai.OpenAI(api_key=api_key)
+                    prompt = f"""
+                    Você é uma assistente de casamentos.
+                    
+                    Evento: {event.name or event.couple_names}
+                    Convidados: {total_guests} total, {confirmed_guests} confirmados
+                    Fornecedores: {total_suppliers} total, {contracted_suppliers} contratados
+                    Gasto: R$ {total_spent}
+                    
+                    Pergunta: {user_message}
+                    """
+                    
+                    response = client.chat.completions.create(
+                        model="gpt-3.5-turbo",
+                        messages=[{"role": "user", "content": prompt}],
+                        max_tokens=300
+                    )
+                    reply = response.choices[0].message.content
+                except Exception as e:
+                    reply = f"Erro na IA: {str(e)}"
+            else:
+                # Resposta sem IA (modo offline)
+                reply = f"""
+                📊 **Resumo do evento:** {event.name or event.couple_names}
+                
+                👥 Convidados: {total_guests} total, {confirmed_guests} confirmados, {pending_guests} pendentes
+                📦 Fornecedores: {total_suppliers} total, {contracted_suppliers} contratados
+                💰 Gasto: R$ {total_spent:.2f}
+                ✅ Tarefas: {completed_tasks}/{total_tasks} concluídas
+                
+                💡 Para ativar o chat com IA, adicione a chave OPENAI_API_KEY no Render!
+                """
             
             return Response({'reply': reply})
             
         except Event.DoesNotExist:
-            return Response(
-                {'error': 'Evento não encontrado'},
-                status=404
-            )
+            return Response({'error': 'Evento não encontrado'}, status=404)
         except Exception as e:
-            print(f"Erro: {str(e)}")
-            return Response(
-                {'error': f'Erro ao processar: {str(e)}'},
-                status=500
-            )
+            return Response({'error': str(e)}, status=500)
