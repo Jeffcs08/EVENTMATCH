@@ -131,7 +131,11 @@ STATIC_URL = 'static/'
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# CORS settings para o React
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
+    "https://eventmatch-c7hb.vercel.app",  # URL do seu frontend
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://eventmatch-c7hb.vercel.app",
 ]
