@@ -16,5 +16,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
     path('api/auth/', include('accounts.urls')),
-    path('api/chat/', include('my_chat_app.urls')),
+    # path('api/chat/', include('my_chat_app.urls')),  # ← COMENTE ESTA LINHA
 ]
