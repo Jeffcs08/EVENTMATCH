@@ -92,15 +92,15 @@ TEMPLATES = [
 WSGI_APPLICATION = 'wedding_planner.wsgi.application'
 
 # Database - SUA CONFIGURAÇÃO DO POSTGRESQL
+
+import os
+import dj_database_url
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'wedding_planner_db',
-        'USER': 'postgres',
-        'PASSWORD': 'admin123',  # ← SENHA NOVA SEM ACENTOS
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
+    'default': dj_database_url.config(
+        default=os.environ.get('DATABASE_URL'),
+        conn_max_age=600
+    )
 }
 
 # Password validation
