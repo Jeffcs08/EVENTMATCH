@@ -1,0 +1,56 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+.venv
+*.log
+*.sqlite3
+*.db
+
+# Django
+*.log
+local_settings.py
+db.sqlite3
+media/
+staticfiles/
+*.pid
+
+# Backend
+wedding_planner/__pycache__/
+wedding_planner/*/__pycache__/
+wedding_planner/*/migrations/__pycache__/
+wedding_planner/*/migrations/*.py
+!wedding_planner/*/migrations/__init__.py
+
+# Frontend
+frontend/node_modules/
+frontend/build/
+frontend/.env
+frontend/.env.local
+frontend/.env.development
+frontend/.env.production
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Secrets
+*.key
+*.pem
+node_modules
+    
