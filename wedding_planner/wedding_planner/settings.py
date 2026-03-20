@@ -131,11 +131,49 @@ STATIC_URL = 'static/'
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# CORS settings - PERMITIR TUDO PARA TESTE (depois pode restringir)
+CORS_ALLOW_ALL_ORIGINS = True
+
+# Se preferir especificar as origens, use:
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
-    "https://eventmatch-c7hb.vercel.app",  # URL do seu frontend
+    "https://eventmatch-c7hb-git-main-jeffersonsouzaj30-3805s-projects.vercel.app",
+    "https://eventmatch-c7hb.vercel.app",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
+    "https://eventmatch-c7hb-git-main-jeffersonsouzaj30-3805s-projects.vercel.app",
     "https://eventmatch-c7hb.vercel.app",
+]
+
+CORS_ALLOW_CREDENTIALS = True
+MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
+    'corsheaders.middleware.CorsMiddleware',  # ← ADICIONE ESTA LINHA
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
+
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
 ]
