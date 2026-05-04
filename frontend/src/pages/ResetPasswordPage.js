@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import api from '../services/api';
 import './AuthPages.css';
@@ -9,16 +9,8 @@ const ResetPasswordPage = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
-  const [tokenValid, setTokenValid] = useState(true);
   const navigate = useNavigate();
   const { token } = useParams();
-
-  useEffect(() => {
-    if (!token) {
-      setTokenValid(false);
-      setError('Token inválido ou expirado.');
-    }
-  }, [token]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -39,51 +31,28 @@ const ResetPasswordPage = () => {
     }
 
     try {
-      await api.post('/password_reset/confirm/', {
-        token: token,
-        password: password
-      });
-
+      await api.post('/password_reset/confirm/', { token, password });
       setMessage('Senha redefinida com sucesso! Redirecionando...');
-      
-      setTimeout(() => {
-        navigate('/login');
-      }, 3000);
-      
+      setTimeout(() => navigate('/login'), 3000);
     } catch (err) {
-      console.error('Erro:', err);
       setError(err.response?.data?.password?.[0] || 'Token inválido ou expirado.');
     } finally {
       setLoading(false);
     }
   };
 
-  if (!tokenValid) {
-    return (
-      <div className="auth-container">
-        <div className="auth-box">
-          <h1>La Vie Casamentos</h1>
-          <h2>Link Inválido</h2>
-          <div className="auth-error">
-            Este link de recuperação é inválido ou já expirou.
-          </div>
-          <Link to="/forgot-password">Solicitar novo link</Link><br />
-          <Link to="/login">Voltar ao login</Link>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="auth-container">
       <div className="auth-box">
-        <h1>La Vie Casamentos</h1>
-        <h2>Redefinir Senha</h2>
+        <div className="auth-header">
+          <h1>La Vie Casamentos</h1>
+          <h2>Redefinir Senha</h2>
+        </div>
 
         {message && <div className="auth-success">{message}</div>}
         {error && <div className="auth-error">{error}</div>}
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="auth-form">
           <div className="form-group">
             <label>Nova Senha</label>
             <input
@@ -106,12 +75,14 @@ const ResetPasswordPage = () => {
             />
           </div>
 
-          <button type="submit" disabled={loading}>
+          <button type="submit" disabled={loading} className="auth-button">
             {loading ? 'Redefinindo...' : 'Redefinir Senha'}
           </button>
         </form>
 
-        <Link to="/login">Voltar para o login</Link>
+        <div className="auth-footer">
+          <p><Link to="/login">Voltar ao login</Link></p>
+        </div>
       </div>
     </div>
   );

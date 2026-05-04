@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../services/api';
+import './AuthPages.css';
 
 const ForgotPasswordPage = () => {
   const [email, setEmail] = useState('');
@@ -26,26 +27,40 @@ const ForgotPasswordPage = () => {
   };
 
   return (
-    <div style={{ maxWidth: 400, margin: '50px auto', padding: 20, textAlign: 'center' }}>
-      <h1>La Vie Casamentos</h1>
-      <h2>Recuperar Senha</h2>
-      {message && <div style={{ color: 'green' }}>{message}</div>}
-      {error && <div style={{ color: 'red' }}>{error}</div>}
-      <p>Digite seu email para receber um link de recuperação.</p>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="email"
-          placeholder="seu@email.com"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          style={{ width: '100%', padding: 10, margin: '10px 0' }}
-        />
-        <button type="submit" disabled={loading} style={{ padding: 10, width: '100%' }}>
-          {loading ? 'Enviando...' : 'Enviar Link de Recuperação'}
-        </button>
-      </form>
-      <Link to="/login">Voltar ao login</Link>
+    <div className="auth-container">
+      <div className="auth-box">
+        <div className="auth-header">
+          <h1>La Vie Casamentos</h1>
+          <h2>Recuperar Senha</h2>
+        </div>
+
+        {message && <div className="auth-success">{message}</div>}
+        {error && <div className="auth-error">{error}</div>}
+
+        <p className="info-text">Digite seu email para receber um link de recuperação.</p>
+
+        <form onSubmit={handleSubmit} className="auth-form">
+          <div className="form-group">
+            <label>E-mail</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              placeholder="Digite seu email"
+              autoComplete="email"
+            />
+          </div>
+
+          <button type="submit" disabled={loading} className="auth-button">
+            {loading ? 'Enviando...' : 'Enviar Link de Recuperação'}
+          </button>
+        </form>
+
+        <div className="auth-footer">
+          <p><Link to="/login" className="back-link">Voltar ao login</Link></p>
+        </div>
+      </div>
     </div>
   );
 };
