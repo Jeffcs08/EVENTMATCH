@@ -4,6 +4,8 @@ import { AuthProvider, useAuth } from './contexts/AuthContext';
 import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
+import ForgotPasswordPage from './pages/ForgotPasswordPage';
+import ResetPasswordPage from './pages/ResetPasswordPage';
 import CreateEventPage from './pages/CreateEventPage';
 import Dashboard from './pages/Dashboard';
 import AdminPage from './pages/AdminPage';
@@ -25,12 +27,49 @@ const PrivateRoute = ({ children, adminOnly = false }) => {
   return children;
 };
 
+const PublicRoute = ({ children }) => {
+  const { user, loading } = useAuth();
+  
+  if (loading) return <div className="loading">Carregando...</div>;
+  
+  if (user) {
+    return <Navigate to="/dashboard" />;
+  }
+  
+  return children;
+};
+
 function AppRoutes() {
   return (
     <Routes>
-      <Route path="/" element={<LandingPage />} />
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/register" element={<RegisterPage />} />
+      {/* Rotas públicas */}
+      <Route path="/" element={
+        <PublicRoute>
+          <LandingPage />
+        </PublicRoute>
+      } />
+      <Route path="/login" element={
+        <PublicRoute>
+          <LoginPage />
+        </PublicRoute>
+      } />
+      <Route path="/register" element={
+        <PublicRoute>
+          <RegisterPage />
+        </PublicRoute>
+      } />
+      <Route path="/forgot-password" element={
+        <PublicRoute>
+          <ForgotPasswordPage />
+        </PublicRoute>
+      } />
+      <Route path="/reset-password/:token" element={
+        <PublicRoute>
+          <ResetPasswordPage />
+        </PublicRoute>
+      } />
+      
+      {/* Rotas privadas */}
       <Route path="/profile" element={
         <PrivateRoute>
           <ProfilePage />
