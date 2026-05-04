@@ -279,7 +279,7 @@ const Dashboard = () => {
           </div>
 
           <div className="section-header" style={{ marginTop: '30px' }}>
-            <h2>Fornecedores</h2>
+            <h2>Convidados</h2>
           </div>
 
           <GuestList
@@ -290,15 +290,6 @@ const Dashboard = () => {
 
           <div className="section-header" style={{ marginTop: '30px' }}>
             <h2>Fornecedores</h2>
-            <button 
-              className="btn"
-              onClick={() => {
-                setEditingSupplier(null);
-                setShowSupplierForm(true);
-              }}
-            >
-              + Adicionar Fornecedor
-            </button>
           </div>
 
           <SupplierList
