@@ -279,16 +279,7 @@ const Dashboard = () => {
           </div>
 
           <div className="section-header" style={{ marginTop: '30px' }}>
-            <h2>Convidados</h2>
-            <button 
-              className="btn"
-              onClick={() => {
-                setEditingGuest(null);
-                setShowGuestForm(true);
-              }}
-            >
-              + Adicionar Convidado
-            </button>
+            <h2>Fornecedores</h2>
           </div>
 
           <GuestList
