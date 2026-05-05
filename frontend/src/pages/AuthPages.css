@@ -3,7 +3,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #fdf2f8; /* Rosa pálido */
   padding: 20px;
 }
 
@@ -14,6 +14,7 @@
   width: 100%;
   max-width: 450px;
   padding: 40px;
+  border-top: 4px solid #d4af37; /* Dourado */
 }
 
 .auth-header {
@@ -28,7 +29,7 @@
 }
 
 .auth-header h2 {
-  color: #64748b;
+  color: #6b7280;
   font-size: 18px;
   font-weight: normal;
 }
@@ -41,7 +42,7 @@
   display: block;
   margin-bottom: 8px;
   font-weight: 600;
-  color: #0f172a;
+  color: #1f2937;
 }
 
 .auth-form input {
@@ -55,25 +56,42 @@
 
 .auth-form input:focus {
   outline: none;
-  border-color: #e11d48;
+  border-color: #d4af37;
+}
+
+.auth-links {
+  text-align: center;
+  margin: 16px 0;
+}
+
+.forgot-link {
+  color: #6b7280;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.forgot-link:hover {
+  color: #e11d48;
+  text-decoration: underline;
 }
 
 .auth-button {
   width: 100%;
   padding: 14px;
-  background: #e11d48;
+  background: linear-gradient(135deg, #e11d48, #d4af37);
   color: white;
   border: none;
   border-radius: 8px;
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: all 0.2s;
   margin-top: 10px;
 }
 
 .auth-button:hover:not(:disabled) {
-  background: #be123c;
+  transform: translateY(-1px);
+  filter: brightness(1.05);
 }
 
 .auth-button:disabled {
@@ -88,6 +106,7 @@
   border-radius: 8px;
   margin-bottom: 20px;
   text-align: center;
+  font-size: 14px;
 }
 
 .auth-success {
@@ -97,12 +116,13 @@
   border-radius: 8px;
   margin-bottom: 20px;
   text-align: center;
+  font-size: 14px;
 }
 
 .auth-footer {
   text-align: center;
   margin-top: 25px;
-  color: #64748b;
+  color: #6b7280;
 }
 
 .auth-footer a {
@@ -113,21 +133,12 @@
 
 .auth-footer a:hover {
   text-decoration: underline;
+  color: #d4af37;
 }
 
-.auth-links {
+.info-text {
   text-align: center;
-  margin: 16px 0 8px 0;
-}
-
-.forgot-link {
-  color: #64748b;
+  color: #6b7280;
   font-size: 14px;
-  text-decoration: none;
-  transition: color 0.2s;
-}
-
-.forgot-link:hover {
-  color: #e11d48;
-  text-decoration: underline;
+  margin-bottom: 20px;
 }
